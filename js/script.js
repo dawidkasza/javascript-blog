@@ -66,14 +66,16 @@ for(let article of articles){
 }
 titleList.innerHTML = html;
 console.log(html);
-}
-
-generateTitleLinks();
 
 const links = document.querySelectorAll('.titles a');
 
 for(let link of links){
    link.addEventListener('click', titleClickHandler);
 }
+
+}
+
+generateTitleLinks();
+
 
 }
