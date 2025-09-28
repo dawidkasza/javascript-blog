@@ -158,4 +158,54 @@
    }
 
    generateAuthors();
+
+   // eslint-disable-next-line no-inner-declarations
+   function AuthorClickHandler(event){
+      /* prevent default action for this event */
+      event.preventDefault();
+      /* make new constant named "clickedElement" and give it the value of "this" */
+      const clickedElement = this;
+      /* make a new constant "href" and read the attribute "href" of the clicked element */
+      const href = clickedElement.getAttribute('href');
+      console.log(href);
+      /* make a new constant "tag" and extract tag from the "href" constant */
+      const author = href.replace('#author-', '');
+      console.log ('Author: '+author);
+      /* find all tag links with class active */
+      const activeAuthors = document.querySelectorAll('a.active');
+      console.log(activeAuthors);
+      /* START LOOP: for each active tag link */
+      for(let activeAuthor of activeAuthors){
+         /* remove class active */
+         activeAuthor.classList.remove('active');
+         //console.log(activeAuthor.classList);
+         /* END LOOP: for each active tag link */
+      }
+      /* find all tag links with "href" attribute equal to the "href" constant */
+      const authors = document.querySelectorAll('a[href="' + href + '"]');
+      console.log(authors); 
+      /* START LOOP: for each found tag link */
+      for(let author of authors){
+         /* add class active */
+         author.classList.add('active');
+         /* END LOOP: for each found tag link */
+      }
+      /* execute function "generateTitleLinks" with article selector as argument */
+      generateTitleLinks('[data-author="' + author + '"]');
+   }
+
+   // eslint-disable-next-line no-inner-declarations
+   function addClickListenersToAuthors(){
+      /* find all links to tags */
+      const links = document.querySelectorAll('a[href^="#author-"]');
+      console.log(links);
+      /* START LOOP: for each link */
+      for(let link of links){
+      /* add tagClickHandler as event listener for that link */
+         link.addEventListener('click', AuthorClickHandler);
+      /* END LOOP: for each link */
+      }
+   }
+
+   addClickListenersToAuthors();
 }
