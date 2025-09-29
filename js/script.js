@@ -29,7 +29,8 @@
       optArticleAuthorsSelector = '.post-author',
       optTagsListSelector = '.tags.list',
       optCloudClassCount = 5,
-      ptCloudClassPrefix = 'tag-size-';
+      optCloudClassPrefix = 'tag-size-',
+      optAuthorsListSelector='.authors.list';
 
    // eslint-disable-next-line no-inner-declarations
    function generateTitleLinks(customSelector = '') {
@@ -90,7 +91,7 @@
 
    // eslint-disable-next-line no-inner-declarations
    function generateTags(){
-      /* [NEW] create a new variable allTags with an empty array */
+      /* [NEW] create a new variable allTags with an empty object */
       let allTags = {};
       /* find all articles */
       const articles= document.querySelectorAll(optArticleSelector);
@@ -133,7 +134,7 @@
       /* [NEW] START LOOP: for each tag in allTags: */
       for(let tag in allTags){
          /* [NEW] generate code of a link and add it to allTagsHTML */
-         allTagsHTML += '<li><a href="#tag-'+tag+'" class="'+ptCloudClassPrefix+calculateTagClass(allTags[tag], tagsParams)+'">'+tag+' (' + allTags[tag] + ') '+'</a></li>';
+         allTagsHTML += '<li><a href="#tag-'+tag+'" class="'+optCloudClassPrefix+calculateTagClass(allTags[tag], tagsParams)+'">'+tag+' (' + allTags[tag] + ') '+'</a></li>';
       }
       /* [NEW] END LOOP: for each tag in allTags: */
 
@@ -190,6 +191,8 @@
 
    // eslint-disable-next-line no-inner-declarations
    function generateAuthors(){
+      /* [NEW] create a new variable allTags with an empty object */
+      let allAuthors = {};
       /* find all articles */
       const articles= document.querySelectorAll(optArticleSelector);
       /* START LOOP: for every article: */
@@ -201,11 +204,35 @@
          /* get author from data-author attribute */
          const articleAuthors = article.getAttribute('data-author');
          const linkHTML = '<a href="#author-'+articleAuthors+'"><span>by '+articleAuthors+'</span></a>';
+         console.log(articleAuthors);
          html=html + linkHTML;
+
+         if(!allAuthors[articleAuthors]) {
+            /* [NEW] add generated code to allAuthors object */
+            allAuthors[articleAuthors] = 1;
+         } else {
+            allAuthors[articleAuthors]++;
+         }
+         console.log(allAuthors);
          /* insert HTML of the links into the author wrapper */
          articleAuthorList.innerHTML = html;
          /* END LOOP: for every article: */
       }
+      /* [NEW] find list of authors in right column */
+      const authorsList = document.querySelector(optAuthorsListSelector);
+      /* [NEW] create variable for all links HTML code */
+      let allAuthorsHTML = '';
+
+      /* [NEW] START LOOP: for each tag in allAuthors: */
+      for(let author in allAuthors){
+         /* [NEW] generate code of a link and add it to allAuthorsHTML */
+         console.log(author);
+         allAuthorsHTML += '<li><a href="#author-'+author+'">'+author+' (' + allAuthors[author] + ') '+'</a></li>';
+      }
+      /* [NEW] END LOOP: for each author in allAuthors: */
+
+      /*[NEW] add HTML from allAuthorsHTML to authorList */
+      authorsList.innerHTML = allAuthorsHTML;
    }
 
    generateAuthors();
